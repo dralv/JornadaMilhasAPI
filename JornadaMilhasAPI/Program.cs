@@ -1,3 +1,7 @@
+using JornadaMilhasAPI.Data.Interfaces;
+using JornadaMilhasAPI.Data.Repositories;
+using JornadaMilhasAPI.Services;
+using JornadaMilhasAPI.Services.Interfaces;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using System.Reflection;
@@ -9,11 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddTransient(x =>
   new MySqlConnection(builder.Configuration.GetConnectionString("JornadaMilhas")));
+builder.Services.AddScoped<IDepoimentoRepository, DepoimentoRepository>();
+builder.Services.AddScoped<IDepoimentoService, DepoimentoService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JornadaMilhasAPI", Version = "v1" });
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
