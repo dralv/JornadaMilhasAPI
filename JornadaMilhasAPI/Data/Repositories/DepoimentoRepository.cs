@@ -14,7 +14,7 @@ namespace JornadaMilhasAPI.Data.Repositories
         public DepoimentoRepository(IConfiguration config)
         {
             _config = config;
-            _connectionString = _config.GetConnectionString("JornadaMilhas");
+            _connectionString = _config["ConnectionString:JornadaMilhas"];
         }
 
         public async Task<int> AtualizarDepoimento(Depoimento depoimento)
@@ -22,6 +22,11 @@ namespace JornadaMilhasAPI.Data.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Método para fazer um insert no banco de dados
+        /// </summary>
+        /// <param name="depoimento"></param>
+        /// <returns></returns>
         public async Task<int> CriarDepoimento(Depoimento depoimento)
         {
             var parameters = new
@@ -43,9 +48,33 @@ namespace JornadaMilhasAPI.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<Depoimento> LerDepoimento(int id)
+        public async Task<Depoimento> ObterDepoimento(int id)
         {
-            throw new NotImplementedException();
+            var parameters = new
+            {
+                id
+            };
+
+            const string sql = "SELECT * FROM DEPOIMENTOS WHERE Id=@id";
+
+            using(var connection = new MySqlConnection(_connectionString))
+            {
+                return await connection.QuerySingleOrDefaultAsync<Depoimento>(sql,parameters);
+            }
+        }
+
+        public async Task<IEnumerable<Depoimento>> ObterDepoimentos(int qtdItens)
+        {
+            var parameters = new
+            { 
+                qtdItens
+            };
+            const string sql = "SELECT * FROM DEPOIMENTOS LIMIT @qtdItens";
+
+            using(var connection = new MySqlConnection(_connectionString))
+            {
+                return await connection.QueryAsync<Depoimento>(sql,parameters);
+            }
         }
     }
 }

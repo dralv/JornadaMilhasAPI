@@ -1,4 +1,5 @@
-﻿using JornadaMilhasAPI.Data.Interfaces;
+﻿using AutoMapper;
+using JornadaMilhasAPI.Data.Interfaces;
 using JornadaMilhasAPI.Models;
 using JornadaMilhasAPI.Services.Interfaces;
 
@@ -7,10 +8,12 @@ namespace JornadaMilhasAPI.Services
     public class DepoimentoService : IDepoimentoService
     {
         private readonly IDepoimentoRepository _repository;
+        private readonly IMapper _mapper;
 
-        public DepoimentoService(IDepoimentoRepository repository)
+        public DepoimentoService(IDepoimentoRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<int> AtualizarDepoimento(Depoimento depoimento)
@@ -28,9 +31,14 @@ namespace JornadaMilhasAPI.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Depoimento> LerDepoimento(int id)
+        public async Task<Depoimento> ObterDepoimento(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.ObterDepoimento(id);
+        }
+
+        public async Task<IEnumerable<Depoimento>> ObterDepoimentos(int qtdItens)
+        {
+            return await _repository.ObterDepoimentos(qtdItens);
         }
     }
 }
