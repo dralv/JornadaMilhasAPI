@@ -1,5 +1,8 @@
 ﻿namespace JornadaMilhasAPI.Models
 {
+    /// <summary>
+    /// Classe de modelo de depoimentos
+    /// </summary>
     public class Depoimento
     {
         public int Id { get; set; }

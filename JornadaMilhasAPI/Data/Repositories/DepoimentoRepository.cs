@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using JornadaMilhasAPI.Data.Interfaces;
+using JornadaMilhasAPI.Dtos;
 using JornadaMilhasAPI.Models;
 using MySqlConnector;
 using System.Runtime.CompilerServices;
@@ -17,9 +18,20 @@ namespace JornadaMilhasAPI.Data.Repositories
             _connectionString = _config["ConnectionString:JornadaMilhas"];
         }
 
-        public async Task<int> AtualizarDepoimento(Depoimento depoimento)
+        public async Task<int> AtualizarDepoimento(DepoimentoDto dto,int id)
         {
-            throw new NotImplementedException();
+            var parameters = new
+            {
+                Id=id,
+                Foto = dto.Foto,
+                Depoimento = dto.DepoimentoTexto,
+                Nome = dto.Nome
+            };
+            const string sql = "UPDATE DEPOIMENTOS SET FOTO=@Foto,DEPOIMENTO_TEXTO=@Depoimento,NOME=@Nome WHERE Id=@Id";
+            using(var connection = new MySqlConnection(_connectionString))
+            {
+                return await connection.ExecuteAsync(sql, parameters); 
+            }
         }
 
         /// <summary>
@@ -45,7 +57,17 @@ namespace JornadaMilhasAPI.Data.Repositories
 
         public async Task<int> DeletarDepoimento(int id)
         {
-            throw new NotImplementedException();
+            var parameters = new
+            {
+                id
+            };
+            const string sql = "DELETE FROM DEPOIMENTOS WHERE @Id=id";
+
+            using(var connection = new MySqlConnection(_connectionString))
+            {
+                return await connection.ExecuteAsync(sql, parameters);
+            }
+            
         }
 
         public async Task<Depoimento> ObterDepoimento(int id)

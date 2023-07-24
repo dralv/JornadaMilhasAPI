@@ -1,4 +1,5 @@
-﻿using JornadaMilhasAPI.Models;
+﻿using JornadaMilhasAPI.Dtos;
+using JornadaMilhasAPI.Models;
 
 namespace JornadaMilhasAPI.Data.Interfaces
 {
@@ -6,7 +7,7 @@ namespace JornadaMilhasAPI.Data.Interfaces
     {
          Task<int> CriarDepoimento(Depoimento depoimento);
          Task<Depoimento>ObterDepoimento(int id);
-         Task<int> AtualizarDepoimento(Depoimento depoimento);
+         Task<int> AtualizarDepoimento(DepoimentoDto dto,int id);
          Task<int> DeletarDepoimento(int id);
          Task<IEnumerable<Depoimento>> ObterDepoimentos(int qtdItens);
     }

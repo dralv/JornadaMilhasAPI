@@ -5,14 +5,17 @@ using JornadaMilhasAPI.Services.Interfaces;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using System.Reflection;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 builder.Services.AddTransient(x =>
   new MySqlConnection(builder.Configuration.GetConnectionString("JornadaMilhas")));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IDepoimentoRepository, DepoimentoRepository>();
 builder.Services.AddScoped<IDepoimentoService, DepoimentoService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -33,10 +36,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();
+app.UseCors(c =>
+{
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
 
+});
 app.UseAuthorization();
 
 app.MapControllers();
